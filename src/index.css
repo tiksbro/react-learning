@@ -1,38 +1,55 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f0f2f5;
-  display: flex;
-  justify-content: center;
-  padding: 40px;
-}
-
-.card {
-  background: white;
-  margin: 20px;
-  top: 20px;
-  
+  margin: 0;
   padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
 }
 
-h1 {
+.app {
   text-align: center;
 }
 
-h2 {
-  color: #2563eb;
-}
-button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
+h1 {
+  color: #333;
+  margin-bottom: 30px;
 }
 
-button:hover {
-  background: #1d4ed8;
+.card {
+  width: 320px;
+  background: white;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  text-align: left;
+}
+
+.card h2 {
+  color: #0077cc;
+  margin-bottom: 15px;
+}
+
+.card p {
+  margin: 8px 0;
+}
+
+.card button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #0077cc;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.card button:hover {
+  background: #005fa3;
+}
+.profile {
+  margin-top: 15px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
 }

@@ -1,24 +1,37 @@
 import { useState } from "react";
 
-function studentCard(props) {
-  const [showDetails, setShowDetails] = useState(false);
+function StudentCard(props) {
+  const [showProfile, setShowProfile] = useState(false);
+
+  function toggleProfile() {
+    setShowProfile(!showProfile);
+  }
 
   return (
     <div className="card">
       <h2>{props.name}</h2>
 
-      {showDetails && (
-        <div>
-          <p>{props.course}</p>
-          
+      <button onClick={toggleProfile}>
+        {showProfile ? "Hide Profile" : "View Profile"}
+      </button>
+
+      {showProfile && (
+        <div className="profile">
+          <p>
+            <strong>Age:</strong> {props.age}
+          </p>
+
+          <p>
+            <strong>Course:</strong> {props.course}
+          </p>
+
+          <p>
+            <strong>College:</strong> {props.college}
+          </p>
         </div>
       )}
-
-      <button onClick={() => setShowDetails(!showDetails)}>
-        {showDetails ? "Hide Details" : "Show Details"}
-      </button>
     </div>
   );
 }
 
-export default studentCard;
+export default StudentCard;
