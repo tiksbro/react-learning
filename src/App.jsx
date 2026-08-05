@@ -25,6 +25,8 @@ const [name, setName] = useState("");
 const [age, setAge] = useState("");
 const [course, setCourse] = useState("");
 const [college, setCollege] = useState("");
+const [editingId, setEditingId] = useState(null);
+const [search, setSearch] = useState("");
 function addStudent() {
 
   const newStudent = {
@@ -42,11 +44,54 @@ function addStudent() {
   setCourse("");
   setCollege("");
 }
+function editStudent(student){
+  setEditingId(student.id);
+  setName(student.name);
+  setAge(student.age);
+  setCourse(student.course);
+  setCollege(student.college);
+  
+}
+function updateStudent() {
+  const updatedStudents = students.map((student) => {
+    if (student.id === editingId) {
+      return {
+        ...student,
+        name,
+        age,
+        course,
+        college,
+      };
+    }
+
+    return student;
+  });
+
+  setStudents(updatedStudents);
+
+  setEditingId(null);
+
+  setName("");
+  setAge("");
+  setCourse("");
+  setCollege("");
+}
+const filteredStudents = students.filter((student) =>
+  student.name.toLowerCase().includes(search.toLowerCase())
+);
 
   return (
     <div className="app">
 
       <h1>Student Management App</h1>
+      <div className="search-box">
+  <input
+    type="text"
+    placeholder="Search Student..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+</div>
 
       <div className="form">
         <input
@@ -73,16 +118,20 @@ function addStudent() {
           value={college}
           onChange={(e) => setCollege(e.target.value)}
         />
-        <button onClick={addStudent}>Add Student</button>
+       <button onClick={editingId ? updateStudent : addStudent}>
+  {editingId ? "Update Student" : "Add Student"}
+</button>
       </div>
 
-      {students.map((student) => (
+      {filteredStudents.map((student) => (
         <StudentCard
           key={student.id}
+          id={student.id}
           name={student.name}
           age={student.age}
           course={student.course}
           college={student.college}
+          editStudent={editStudent}
         />
       ))}
 

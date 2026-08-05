@@ -30,6 +30,18 @@ function StudentCard(props) {
           </p>
         </div>
       )}
+      <button
+  className="edit-btn"
+  onClick={() => props.editStudent({
+    id: props.id,
+    name: props.name,
+    age: props.age,
+    course: props.course,
+    college: props.college,
+  })}
+>
+  Edit
+</button>
     </div>
   );
 }
