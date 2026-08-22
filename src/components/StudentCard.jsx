@@ -31,17 +31,34 @@ function StudentCard(props) {
         </div>
       )}
       <button
-  className="edit-btn"
+       className="edit-btn"
   onClick={() => props.editStudent({
     id: props.id,
     name: props.name,
     age: props.age,
     course: props.course,
     college: props.college,
-  })}
+      })}
 >
-  Edit
-</button>
+      Edit
+     </button>
+     <button
+       className="delete-btn"
+       onClick={() => {
+        const confirmDelete = window.confirm(
+          "are you sure you want to delete this student?"
+
+        );
+        if (confirmDelete) {
+          props.deleteStudent(props.id);
+        }
+       }
+
+       }
+     >
+      Delete
+     </button>
+       
     </div>
   );
 }
