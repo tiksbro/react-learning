@@ -1,7 +1,15 @@
 import {useContext} from "react";
 import StudentCard from "./StudentCard";
 import useStudents from "../hooks/useStudents";
+import { useState, useEffect } from "react";
+import { getStudents } from "../api/studentApi";
 function StudentList() {
+    const [students, setStudents] = useState([]);
+    useEffect(() => {
+        getStudents().then((data) => {
+            setStudents(data);
+        });
+    }, []);
   const { filteredStudents,editStudent,deleteStudent } = useStudents(); 
   return (
     <div>

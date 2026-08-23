@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect } from "react";
+import { getStudents } from "../api/studentApi";
+import { createContext,useContext, useState, useEffect } from "react";
 
 const StudentContext = createContext();
 
@@ -129,6 +130,24 @@ function showMessage(message) {
         setSuccess("");
     }, 3000);
 }
+async function fetchStudents() {
+  try {
+    setLoading(true);
+
+    const data = await getStudents();
+
+    setStudents(data);
+
+  } catch (error) {
+    console.log("Error fetching students:", error);
+    setError("Failed to load students");
+  } finally {
+    setLoading(false);
+  }
+}
+useEffect(() => {
+    fetchStudents();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("students", JSON.stringify(students));
