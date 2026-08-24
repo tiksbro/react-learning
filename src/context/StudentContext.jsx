@@ -1,5 +1,5 @@
-import { getStudents } from "../api/studentApi";
-import { createContext,useContext, useState, useEffect } from "react";
+import { getStudents, createStudent, } from "../api/studentApi";
+import { createContext, useState, useEffect } from "react";
 
 const StudentContext = createContext();
 
@@ -58,29 +58,45 @@ function validateForm() {
     setError("");
     return true;
 }
-function addStudent() {
+async function addStudent() {
   if (!validateForm()) {
     return;
   }
-  setLoading(true);
 
-  const newStudent = {
-    id: crypto.randomUUID(),
-    name,
-    age,
-    course,
-    college,
-  };
+  try {
+    setLoading(true);
 
-  setStudents([...students, newStudent]);
+    const newStudent = {
+      name,
+      age,
+      course,
+      college,
+    };
 
-  setName("");
-  setAge("");
-  setCourse("");
-  setCollege("");
-  setLoading(false);
-  setSuccess("Student added successfully!");
-  showMessage("Student added successfully!");
+    const savedStudent = await createStudent(newStudent);
+
+    setStudents((previousStudents) => [
+      ...previousStudents,
+      {
+        ...newStudent,
+        id: savedStudent.id,
+      },
+    ]);
+
+    setName("");
+    setAge("");
+    setCourse("");
+    setCollege("");
+
+    showMessage("Student added successfully!");
+
+  } catch (error) {
+    console.log("Error adding student:", error);
+    setError("Failed to add student");
+
+  } finally {
+    setLoading(false);
+  }
 }
 function editStudent(student) {
   setEditingId(student.id);
@@ -134,9 +150,19 @@ async function fetchStudents() {
   try {
     setLoading(true);
 
-    const data = await getStudents();
+   const data = await getStudents();
 
-    setStudents(data);
+const formattedStudents = data.map((student) => {
+  return {
+    id: student.id,
+    name: student.name,
+    age: 20 + student.id,
+    course: "BSc CSIT",
+    college: student.company.name,
+  };
+});
+
+setStudents(formattedStudents);
 
   } catch (error) {
     console.log("Error fetching students:", error);
