@@ -1,4 +1,4 @@
-import { getStudents, createStudent, } from "../api/studentApi";
+import { getStudents, createStudent, updateStudentApi,deleteStudentApi } from "../api/studentApi";
 import { createContext, useState, useEffect } from "react";
 
 const StudentContext = createContext();
@@ -105,40 +105,68 @@ function editStudent(student) {
   setCourse(student.course);
   setCollege(student.college);
 }
-function updateStudent() {
-    if (!validateForm()) {
-        return;
-    }
-  const updatedStudents = students.map((student) => {
-    if (student.id === editingId) {
-      return {
-        ...student,
-        name,
-        age,
-        course,
-        college,
-      };
-    }
+async function updateStudent() {
+  try {
+    setLoading(true);
 
-    return student;
-  });
+    const updatedStudent = {
+      name,
+      age,
+      course,
+      college,
+    };
 
-  setStudents(updatedStudents);
+    await updateStudentApi(editingId, updatedStudent);
 
-  setEditingId(null);
+    setStudents((previousStudents) =>
+      previousStudents.map((student) => {
+        if (student.id === editingId) {
+          return {
+            ...student,
+            ...updatedStudent,
+          };
+        }
 
-  setName("");
-  setAge("");
-  setCourse("");
-  setCollege("");
-  showMessage("Student updated successfully!");
-}
-function deleteStudent(id) {
-    const updatedStudents = students.filter(
-        (student) => student.id !== id
+        return student;
+      })
     );
-    setStudents(updatedStudents);
+
+    setEditingId(null);
+
+    setName("");
+    setAge("");
+    setCourse("");
+    setCollege("");
+
+    showMessage("Student updated successfully!");
+
+  } catch (error) {
+    console.log("Error updating student:", error);
+    setError("Failed to update student");
+
+  } finally {
+    setLoading(false);
+  }
+}
+async function deleteStudent(id) {
+  try {
+    setLoading(true);
+
+    await deleteStudentApi(id);
+
+    setStudents((previousStudents) =>
+      previousStudents.filter((student) => student.id !== id)
+    );
+
     showMessage("Student deleted successfully!");
+
+  } catch (error) {
+    console.log("Error deleting student:", error);
+    setError("Failed to delete student");
+
+  } finally {
+    setLoading(false);
+  }
 }
 function showMessage(message) {
     setSuccess(message);
