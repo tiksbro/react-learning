@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, memo } from "react";
+import useStudents from "../hooks/useStudents";
 
 function StudentCard(props) {
   const [showProfile, setShowProfile] = useState(false);
+
+  const { deleteStudent } = useStudents();
 
   function toggleProfile() {
     setShowProfile(!showProfile);
@@ -9,6 +12,7 @@ function StudentCard(props) {
 
   return (
     <div className="card">
+
       <h2>{props.name}</h2>
 
       <button onClick={toggleProfile}>
@@ -17,6 +21,7 @@ function StudentCard(props) {
 
       {showProfile && (
         <div className="profile">
+
           <p>
             <strong>Age:</strong> {props.age}
           </p>
@@ -28,39 +33,42 @@ function StudentCard(props) {
           <p>
             <strong>College:</strong> {props.college}
           </p>
+
         </div>
       )}
+
       <button
-       className="edit-btn"
-  onClick={() => props.editStudent({
-    id: props.id,
-    name: props.name,
-    age: props.age,
-    course: props.course,
-    college: props.college,
-      })}
->
-      Edit
-     </button>
-     <button
-       className="delete-btn"
-       onClick={() => {
-        const confirmDelete = window.confirm(
-          "are you sure you want to delete this student?"
-
-        );
-        if (confirmDelete) {
-          props.deleteStudent(props.id);
+        className="edit-btn"
+        onClick={() =>
+          props.editStudent({
+            id: props.id,
+            name: props.name,
+            age: props.age,
+            course: props.course,
+            college: props.college,
+          })
         }
-       }
+      >
+        Edit
+      </button>
 
-       }
-     >
-      Delete
-     </button>
-       
+      <button
+        className="delete-btn"
+        onClick={() => {
+          const confirmDelete = window.confirm(
+            "Are you sure you want to delete this student?"
+          );
+
+          if (confirmDelete) {
+            deleteStudent(props.id);
+          }
+        }}
+      >
+        Delete
+      </button>
+
     </div>
   );
 }
 
-export default StudentCard;
+export default memo(StudentCard);

@@ -1,5 +1,5 @@
 import { getStudents, createStudent, updateStudentApi,deleteStudentApi } from "../api/studentApi";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback, useMemo } from "react";
 
 const StudentContext = createContext();
 
@@ -38,9 +38,11 @@ const [error, setError] = useState("");
 const [loading, setLoading] = useState(false);
 const [success, setSuccess] = useState();
 
-const filteredStudents = students.filter((student) =>
-  student.name.toLowerCase().includes(search.toLowerCase())
-);
+const filteredStudents = useMemo(() => {
+  return students.filter((student) =>
+    student.name.toLowerCase().includes(search.toLowerCase())
+  );
+}, [students, search]);
 
 function validateForm() {
     if(!name || !age || !course || !college){
@@ -58,7 +60,7 @@ function validateForm() {
     setError("");
     return true;
 }
-async function addStudent() {
+ const addStudent = useCallback(async () => {
   if (!validateForm()) {
     return;
   }
@@ -97,15 +99,15 @@ async function addStudent() {
   } finally {
     setLoading(false);
   }
-}
-function editStudent(student) {
+}, [name, age, course, college]);
+const editStudent = useCallback((student) => {
   setEditingId(student.id);
   setName(student.name);
   setAge(student.age);
   setCourse(student.course);
   setCollege(student.college);
-}
-async function updateStudent() {
+}, []);
+const updateStudent = useCallback(async () => {
   try {
     setLoading(true);
 
@@ -147,8 +149,8 @@ async function updateStudent() {
   } finally {
     setLoading(false);
   }
-}
-async function deleteStudent(id) {
+}, [name, age, course, college, editingId]);
+const deleteStudent = useCallback(async (id) => {
   try {
     setLoading(true);
 
@@ -167,7 +169,7 @@ async function deleteStudent(id) {
   } finally {
     setLoading(false);
   }
-}
+}, []);
 function showMessage(message) {
     setSuccess(message);
     setTimeout(() => {
